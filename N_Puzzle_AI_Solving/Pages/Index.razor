@@ -1,0 +1,55 @@
+﻿@page "/"
+
+<div style="width: 100%">
+    <div style="width: 40% ; display:inline-block">
+        <h1>Olá, Bem Vindo!</h1>
+        Indique as dimensões do Quebra-Cabeças
+    </div>
+    <div style="width: 50%; float:right; display:inline-block">
+        <div style="width: 25%; display:inline-block">
+            <button id="btn8_Pecas" @onclick="@(() => DefinedDimension(8))">3x3 Puzzle</button>
+        </div>
+        <div style="width: 25%; display:inline-block">
+            <button id="btn16_Pecas" style="align-content: center" @onclick="@(() => DefinedDimension(16))">4x4 Puzzle</button>
+        </div>
+    </div>
+    <div>
+        <div style="width: 50%; float:right; display:inline-block">
+            <GridBidimensional coordenadaY="coordenadaY" coordenadaX="coordenadaX"></GridBidimensional>
+        </div>
+        <div style="width: 50%; float:right; display:inline-block"> 
+            <GridBidimensional coordenadaY="coordenadaY" coordenadaX="coordenadaX"></GridBidimensional>
+        </div>
+    </div>
+
+</div>
+
+
+@code{
+    private int coordenadaY;
+    private int coordenadaX;
+
+    private void DefinedDimension(int numeroPecas)
+    {
+
+        switch (numeroPecas)
+        {
+            case 8:
+                coordenadaX = 3;
+                coordenadaY = 3;
+                Console.WriteLine($"X{coordenadaX}+Y{coordenadaY}");
+                break;
+            case 16:
+                coordenadaX = 4;
+                coordenadaY = 4;
+                Console.WriteLine($"X{coordenadaX}+Y{coordenadaY}");
+                break;
+
+            default:
+                break;
+        }
+
+    }
+
+
+}
