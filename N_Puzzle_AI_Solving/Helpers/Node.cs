@@ -15,9 +15,14 @@ namespace N_Puzzle_AI_Solving.Helpers
         ///Valores para possivel uso em Heuristica 
         public int cost { get; set; }
         public int level { get; set; }
+
+        public int H_cost { get; set; } //Custo estimado para alcançar o Objetivo
+        public int G_cost { get; set; } //Custo estimado para alcançar este Nó a partir do raiz
+        public int F_cost { get; set; } //Custo Calculado pela Heuristica
+
         /// Adjacentes
-        
- //       public Node parent { get; set; }
+
+        //       public Node parent { get; set; }
         public Node filho { get; set; }
         public Node irmao { get; set; }
 
