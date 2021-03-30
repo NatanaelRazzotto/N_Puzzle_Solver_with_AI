@@ -22,7 +22,7 @@ namespace N_Puzzle_AI_Solving.Helpers
 
         /// Adjacentes
 
-        //       public Node parent { get; set; }
+        public Node parent { get; set; }
         public Node filho { get; set; }
         public Node irmao { get; set; }
 

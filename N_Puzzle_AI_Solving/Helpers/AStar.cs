@@ -18,6 +18,8 @@ namespace N_Puzzle_AI_Solving.Helpers
         int colEmpty { get; set; }
         int rowEmptyY { get; set; }
         bool passou = true;
+        bool[] noContado = new bool[4];
+
 
 
         public Astar(int keyFather, int keyNode, int emptyX, int emptyY, int coordX, int coordY, int[,] MatrixIni, int[,] MatrixFinal)
@@ -42,47 +44,102 @@ namespace N_Puzzle_AI_Solving.Helpers
             rowEmptyY = Grafo.nodeRaiz.coordinateY;
             colEmpty = Grafo.nodeRaiz.coordinateX;
             //ver questão da lista de preferencia e comparação
-            Queue<Node> PriorityLista = new Queue<Node>();
-            PriorityLista.Enqueue(Grafo.nodeRaiz);
+            BinaryHeapMin minHeap = new BinaryHeapMin(9);
+            minHeap.insert(Grafo.nodeRaiz);
+            //Queue<Node> PriorityLista = new Queue<Node>();
+            //PriorityLista.Enqueue(Grafo.nodeRaiz);
             List<Node> ListaFechada = new List<Node>();
 
             //int c = 0;
             //int depth = 0;
             //int isGoal = 0;
             Node node = new Node();
-            node = PriorityLista.Dequeue();
+            node = minHeap.getMinRoot();
+            //node = PriorityLista.Dequeue();
             while (!ValidadordeEstados(node.stateMatrix))
             {
                 ListaFechada.Add(node);
                 List<Node> Sucessores = new List<Node>();
-              //  Sucessores = expandirSubjacentes();
+                expandirSubjacentes(controlePai, node);//deveria receber sucessor,como?
+                foreach (Node child in Sucessores)
+                {
+                    if (ValidadordeEstados(child.stateMatrix))
+                    {
+                        //TODO
+                        break;
+                    }
+                    if(filaPrioridadeContem(PriorityLista,child))
+                    {
+                        continue;
+                    }
+                    if (listaFechadaContem(ListaFechada,child)) {
+                        continue;
+                    }
+                    PriorityLista.Enqueue(child);
+
+
+                }
+
+
             }
-
-
-
-
-
-
             ///////vereficarPossibilidades()
         }
-        public void expandirSubjacentes(int controlaPai, Node gradeAtual)
+        public bool filaPrioridadeContem(Queue<Node> PriorityQueue, Node child)
+        {
+            foreach (Node x in PriorityQueue)
+            {
+                int[,] arrayStateLista = x.stateMatrix;
+                int[,] arrayNodeState = child.stateMatrix;
+                if (Equals(arrayStateLista, arrayNodeState))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public bool listaFechadaContem(List<Node> ListaFechada, Node child)
+        {
+            foreach (Node x in ListaFechada)
+            {
+                int[,] arrayStateLista = x.stateMatrix;
+                int[,] arrayNodeState = child.stateMatrix;
+                ///if (arrayStateLista == arrayNodeState)
+                if (Equals(arrayStateLista, arrayNodeState))
+                {
+                    return true;
+                }
+               // if(arrayStateLista.SequenceEqual(arrayNodeState))
+            }
+            return false;
+        }
+        public void expandirSubjacentes(int controlaPai, Node gradeNode)
         {
             //passou = ValidadordeEstados(MatrixActual);
             int temp;
             int[,] newsubNo;
-            int row = gradeAtual.coordinateY;
-            int col = gradeAtual.coordinateX;
+            int row = gradeNode.coordinateY;
+            int col = gradeNode.coordinateX;
+            Node nodeChild;
 
             if (passou != true)
             {
                 //Up
-                if (rowEmptyY > 0){
-                    newsubNo = gradeAtual.stateMatrix;
+                if ((rowEmptyY > 0) && (noContado[0] != true))
+                {
+                    newsubNo = (int[,]) gradeNode.stateMatrix.Clone();
                     temp = newsubNo[row - 1, col];
                     newsubNo[row - 1, col] = 0;
                     newsubNo[row, col] = temp;
-                   // newsubNo = Grafo.CreateNode(keyPai, keyNode, row - 1, col, distCalc, G_cost, MatrixInitial);
-
+                    int distCalc = DistanceManhanttan(newsubNo, Grafo.nodeMeta.stateMatrix);
+                    //int Gcost = gradeNode.G_cost + 1;
+                    gradeNode = Grafo.Inserir(gradeNode, chaveAtual, row - 1, col, distCalc, newsubNo);
+                    //nodeChild.parent = gradeNode;
+                    chaveAtual++;
+                    noContado[0] = true;
+                    //  ControlePai = NodaArvore.Pai_do_no;
+                    //  da_ou_nao_da[1] = true;
+                    //  Verefica(Matriz_trabalhada, corY, corX, controlaPai + 1);
+                    expandirSubjacentes(controlaPai, gradeNode);
 
                 }
                 //Down
@@ -100,6 +157,8 @@ namespace N_Puzzle_AI_Solving.Helpers
                 {
 
                 }
+
+              //  return gradeNode;
 
                 //Vereficar se existe a possibilidade do uso de adjacencia aqui
                 //Construção do grafo Estudos da construção usando BFS,DFS OU IDFS
