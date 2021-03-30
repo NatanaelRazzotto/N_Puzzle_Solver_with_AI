@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace N_Puzzle_AI_Solving.Helpers
 {
-    public class BinaryHeapMin
+    public class BinaryHeapMin //Necessitou-se criar uma outra arvore binaria para a lista de precedencia
     {
         public Node[] heapArray { get; set; }//int
         public int capacity { get; set; }
@@ -24,18 +24,19 @@ namespace N_Puzzle_AI_Solving.Helpers
 
             while (i != 0 && heapArray[i].F_cost < heapArray[Parent(i)].F_cost)
             {
-                Trocar(ref heapArray[i],
-                ref heapArray[Parent(i)]);
+                Trocar(ref heapArray[i],ref heapArray[Parent(i)]);
                 i = Parent(i);
             }
             return true;
         }
         public Node getMinRoot() {
-            return heapArray[0];
+            Node root = heapArray[0];
+            deleteNode(0);
+            return root;
         }
         public void deleteNode(int key)
         {
-            decreaseKey(key, int.MinValue);
+            decreaseKey(key);//int.MinValue
             extractMin();
 
         }
@@ -62,9 +63,11 @@ namespace N_Puzzle_AI_Solving.Helpers
 
             return root;
         }
-        public void decreaseKey(int key, int new_val)
+        public void decreaseKey(int key)//
         {
-            heapArray[key].F_cost = new_val;
+            Node new_val = new Node();
+            new_val.F_cost = int.MinValue;
+            heapArray[key] = new_val;
 
             while (key != 0 && heapArray[key].F_cost <
                                heapArray[Parent(key)].F_cost)

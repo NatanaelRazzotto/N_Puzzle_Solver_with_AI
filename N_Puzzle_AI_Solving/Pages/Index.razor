@@ -21,6 +21,11 @@
             <GridBidimensional coordenadaY="coordenadaY" coordenadaX="coordenadaX"></GridBidimensional>
         </div>
     </div>
+    <div>
+        <div style="width: 25%; display:inline-block">
+            <button id="btn8_Pecas" @onclick="Start">Start</button>
+        </div>
+    </div>
 
 </div>
 
@@ -48,6 +53,11 @@
             default:
                 break;
         }
+
+    }
+    private void Start() {
+        Controller controladora = new Controller();
+        controladora.startSolver(); //Possivelmente passar os valores de entrada com base na matriz construida.
 
     }
 
